@@ -1,0 +1,11 @@
+{
+  "name": "tronlink-qr-scanner-decoder",
+  "version": "1.0.0",
+  "description": "TRON LINK QR scanner and transaction decoder (single-file build).",
+  "scripts": {
+    "build": "node build/build-inline.js"
+  },
+  "author": "!Joy!",
+  "license": "MIT"
+}
+

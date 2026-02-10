@@ -1,5 +1,4 @@
 // QR-сканер для TRON LINK
-
 (function () {
   if (!window.jsQR || typeof window.jsQR !== 'function') {
     // Удаляем camera-container и кнопки управления

@@ -1,4 +1,18 @@
 // --- Вспомогательные функции ---
+
+// Парсит подпись
+function parseTronSignature(hex) {
+  if (hex.length !== 130) {
+    return { raw: hex };
+  }
+
+  return {
+    r: hex.substr(0, 64),
+    s: hex.substr(64, 64),
+    v: parseInt(hex.substr(128, 2), 16)
+  };
+}
+
 // Varint из hex
 function readVarintFromHex(hex, pos) {
   let result = 0n, shift = 0n, cur = pos;
@@ -29,7 +43,8 @@ function readTagFromHex(hex, pos) {
   const fieldNum = Number(tag >> 3n);
   return { fieldNum, wireType, newPos: t.newPos };
 }
-// Переводит ansii в Hex
+
+// Переводит ascii в Hex
 function asciiToHex(str) {
   let h = "";
   for (let i = 0; i < str.length; i++) h += str.charCodeAt(i).toString(16).padStart(2, "0");
@@ -171,7 +186,7 @@ function decodeSmartContractData(dataHex) {
   const out = { methodID };
 
   // Популярные сигнатуры функций
-  const signatures = {
+  const abi_signatures = {
     "a9059cbb": "transfer(address,uint256)",
     "095ea7b3": "approve(address,uint256)",
     "23b872dd": "transferFrom(address,address,uint256)",
@@ -180,7 +195,7 @@ function decodeSmartContractData(dataHex) {
     "39509351": "increaseAllowance(address,uint256)",
     "79cc6790": "transferOwnership(address)"
   };
-  const descriptions = {
+  const abi_signatures_descriptions = {
     "a9059cbb": "Перевод токенов",
     "095ea7b3": "Разрешение адресу распоряжаться токенами",
     "23b872dd": "Позволяет третьей стороне перевести токены от одного адреса к другому, если первый адрес заранее сделал approve.",
@@ -190,22 +205,24 @@ function decodeSmartContractData(dataHex) {
     "79cc6790": "Передать владение контрактом другому адресу. После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint)."
   };
 
-  const func = signatures[methodID] || "unknown_function";
-  const description = descriptions[methodID] || "unknown_function";
+  const func = abi_signatures[methodID] || "unknown_function";
+  const description = abi_signatures_descriptions[methodID] || "unknown_function";
   out.function = func;
   out.description = description;
 
-  // Аргументы идут после первых 8 символов (4 байта)
+  // Аргументы идут после первых 8 символов (4 байта) (названия функции)
   const argsHex = dataHex.substr(8);
   const args = argsHex.match(/.{1,64}/g) || [];
 
-  function parseAddress(argHex) {
+  // Преобразует hex-значение из аргументов контракта в Hex-адрес формата Tron
+  function argHexToHexTronAddress(argHex) {
     // В Ethereum — "0x" + последние 40 символов
     // В Tron — "41" + последние 40 символов
     return "41" + argHex.slice(-40);
   }
 
-  function parseUint(argHex) {
+  // Преобразует hex-значение из аргументов контракта в читаемое десятичное число (строку)
+  function argHexToUint256str(argHex) {
     return BigInt("0x" + argHex).toString(10);
   }
 
@@ -219,8 +236,8 @@ function decodeSmartContractData(dataHex) {
       // Передаёт токены от текущего владельца (кто вызывает транзакцию) другому адресу.
       // to_address — адрес получателя.
       // uint256 amount — количество токенов (в минимальных единицах, например 1 USDT = 1 000 000 единиц).
-      const to_address_hex = "41" + args[0].slice(-40);;
-      const amount = BigInt("0x" + args[1]).toString(10);
+      const to_address_hex = argHexToHexTronAddress(args[0]);
+      const amount = argHexToUint256str(args[1]);
       out.to_address_hex = to_address_hex;
       out.to_address = addressFromHex(to_address_hex);
       out.amount = amount;
@@ -231,8 +248,8 @@ function decodeSmartContractData(dataHex) {
       // Позволяет владельцу токенов разрешить другому адресу (например, смарт-контракту) тратить их токены.
       // spender — кому разрешено тратить.
       // uint256 amount — лимит на использование токенов (в минимальных единицах, например 1 USDT = 1 000 000 единиц).
-      const spender = "41" + args[0].slice(-40);;
-      const amount = BigInt("0x" + args[1]).toString(10);
+      const spender = argHexToHexTronAddress(args[0]);
+      const amount = argHexToUint256str(args[1]);
       out.spender_address_hex = spender;
       out.spender_address = addressFromHex(spender);
       out.amount = amount;
@@ -245,13 +262,13 @@ function decodeSmartContractData(dataHex) {
       // address from — чей баланс списывается.
       // address to — кому отправляются токены.
       // uint256 amount — сколько отправить.
-      const from = "41" + args[0].slice(-40);;
-      const to = "41" + args[1].slice(-40);;
-      const amount = BigInt("0x" + args[2]).toString(10);
+      const from = argHexToHexTronAddress(args[0]);
+      const to = argHexToHexTronAddress(args[1]);
+      const amount = argHexToUint256str(args[2]);
       out.from_address_hex = from;
       out.from_address = addressFromHex(from);
       out.to_address_hex = to;
-      out.to_address = addressFromHex(to);;
+      out.to_address = addressFromHex(to);
       out.amount = amount;
       break;
     }
@@ -260,8 +277,8 @@ function decodeSmartContractData(dataHex) {
       // Назначение: создать (выпустить) новые токены.
       // address to — адрес получателя (кому начисляются новые токены).
       // uint256 amount — количество токенов для выпуска.
-      const to = "41" + args[0].slice(-40);;
-      const amount = BigInt("0x" + args[1]).toString(10);
+      const to = argHexToHexTronAddress(args[0]);
+      const amount = argHexToUint256str(args[1]);
       out.to_address_hex = to;
       out.amount = amount;
       break;
@@ -271,7 +288,7 @@ function decodeSmartContractData(dataHex) {
       // Назначение: уничтожить часть токенов, уменьшив общее предложение.
       // uint256 amount — количество токенов для сжигания.
       // Баланс отправителя уменьшается на указанную сумму, а totalSupply — тоже.
-      out.amount = BigInt("0x" + args[0]).toString(10);
+      out.amount = argHexToUint256str(args[0]);
       break;
     }
 
@@ -280,8 +297,8 @@ function decodeSmartContractData(dataHex) {
       // address spender — кто сможет тратить токены.
       // uint256 addedValue — на сколько увеличить лимит.
       // Используется вместе с approve, чтобы постепенно увеличивать лимит без его обнуления.
-      const spender = "41" + args[0].slice(-40);;
-      const addedValue = BigInt("0x" + args[1]).toString(10);
+      const spender = argHexToHexTronAddress(args[0]);
+      const addedValue = argHexToUint256str(args[1]);
       out.spender_address_hex = spender;
       out.spender_address = addressFromHex(spender);
       out.added_value = addedValue;
@@ -292,7 +309,7 @@ function decodeSmartContractData(dataHex) {
       // Назначение: передать владение контрактом другому адресу.
       // address newOwner — новый владелец.
       // После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint).
-      const newOwner = "41" + args[0].slice(-40);;
+      const newOwner = argHexToHexTronAddress(args[0]);
       out.new_owner_hex = newOwner;
       out.new_owner = addressFromHex(newOwner);
       break;
@@ -306,8 +323,9 @@ function decodeSmartContractData(dataHex) {
 }
 
 function getContractValueFromHex(valueHex, type_url) {
-  const debug = true;
-  if(debug) console.log('decode valueHex', valueHex);
+  //const DEBUG = true;
+  if(DEBUG) console.log('decode valueHex', valueHex);
+
   // Разбор полей TriggerSmartContract
   let p = 0;
   let type = type_url.replace('type.googleapis.com/protocol.', '');
@@ -315,10 +333,9 @@ function getContractValueFromHex(valueHex, type_url) {
   const out = { type: type };
 
   while (p < valueHex.length) {
-
     const tagInfo = readTagFromHex(valueHex, p);
     p = tagInfo.newPos;
-    // if(debug) console.log('tagInfo',tagInfo);
+    // if(DEBUG) console.log('tagInfo',tagInfo);
     const { fieldNum, wireType } = tagInfo;
 
     let fieldVal, _uFieldPostfix, _uFieldVal;
@@ -343,7 +360,7 @@ function getContractValueFromHex(valueHex, type_url) {
     } else if (wireType === 5) { // 32-bit
       fieldVal = valueHex.substr(p, 8);
       p += 8;
-      _uFieldPostfix = "_fixed64_hex";
+      _uFieldPostfix = "_fixed32_hex";
       _uFieldVal = fieldVal;
     } else {
       throw new Error("Unsupported wireType " + wireType + " at field " + fieldNum);
@@ -384,7 +401,6 @@ function getContractValueFromHex(valueHex, type_url) {
         case 4: //field 4: wraper (tag 22)
           out.data_hex = fieldVal;
           out.data_parsed = decodeSmartContractData(fieldVal);
-          // out.data_parsed2 = decodeContractData(fieldVal);
           break;
         case 5: //field 5: wraper (tag 28)
           out.call_token_value = fieldVal.toString();
@@ -403,35 +419,51 @@ function getContractValueFromHex(valueHex, type_url) {
   return out;
 }
 
-
 function getContractTypeFromHex(hex) {
-  const debug = true;
+  const fields = getFields(hex);
+  if(DEBUG) console.log('getContractTypeFromHex hex',hex);
+  if(DEBUG) console.log('getContractTypeFromHex fields',fields);
   const contract_type = {};
-  let type_url = '';
-  let pos = hex.indexOf('0a');
 
-  // field 1: type_url (tag 0a) /** @type {!Uint8Array} */
-  if (hex.substr(pos, 2) === '0a') {
-    const { dataHex, newPos } = readLengthDelimited(hex, pos + 2);
-    if(debug) console.log('getContractTypeFromHex dataHex',dataHex, 'newPos', newPos);
-    type_url = hexToUtf8(dataHex);
-    contract_type.type_url = type_url;
-    pos = newPos;
+  for (const f of fields) {
+    switch (f.fieldNumber) {
+      case 1: // field 1: type_url (tag 0a) /** @type {!number} */
+        contract_type.type = Number(f.value);
+        break;
+      case 2: // field 2: value (tag 12) /** @type {!Uint8Array} */
+        const type_param = getContractTypeParameterFromHex(f.dataHex);
+        contract_type.type_url = type_param.type_url;
+        contract_type.value = type_param.value;
+        break;
+      case 4: // field 4: value (tag 22) /** @type {!Uint8Array} */
+        contract_type.value = {type: hexToUtf8(f.dataHex)};
+        break;
+    }
   }
-
-  // field 2: type_url (tag 12) /** @type {!Uint8Array} */
-  if (hex.substr(pos, 2) === '12') {
-    const { dataHex, newPos } = readLengthDelimited(hex, pos + 2);
-    if(debug) console.log('getContractTypeFromHex dataHex',dataHex, 'newPos', newPos);
-    contract_type.value = getContractValueFromHex(dataHex, type_url);
-    pos = newPos;
-  }
-  return contract_type
+  if(DEBUG) console.log('getContractTypeFromHex contract_type',contract_type);
+  return contract_type;
 }
 
+function getContractTypeParameterFromHex(hex) {
+  const fields = getFields(hex);
+  if(DEBUG) console.log('getContractTypeParameterFromHex hex',hex);
+  if(DEBUG) console.log('getContractTypeParameterFromHex fields',fields);
+  const contract_type_param = {};
+  for (const f of fields) {
+    switch (f.fieldNumber) {
+      case 1: // field 1: type_url (tag 0a) /** @type {!Uint8Array} */
+        contract_type_param.type_url = hexToUtf8(f.dataHex);
+        break;
+      case 2: // field 2: value (tag 12) /** @type {!Uint8Array} */
+        contract_type_param.value = getContractValueFromHex(f.dataHex, contract_type_param.type_url);
+        break;
+    }
+  }
+  if(DEBUG) console.log('getContractTypeParameterFromHex contract_type_param',contract_type_param);
+  return contract_type_param;
+}
 
-
-function getMessageFromHex(rawHex) {
+function getMessageFromHex(messageHex) {
   // -----
     // Поле  Название         Tag(hex)   WireType  Тип данных        Комментарий
     //   1   ref_block_bytes  0a           2        bytes (2 байта)   короткий ref блока
@@ -443,221 +475,161 @@ function getMessageFromHex(rawHex) {
     //   11  contract         5a           2        message[]         список контрактов
     //   12  scripts          62           2        bytes             internal scripts
     //   14  timestamp        70           0        varint            метка времени
-    //   18  fee_limit        90           0        varint            лимит комиссии
+    //   18  fee_limit        9001         0        varint            лимит комиссии
   // ----
-  const debug = true;
+  const fields = getFields(messageHex);
+  if(DEBUG) console.log('getMessageFromHex fields',fields);
   const message = {};
-  let pos = 0;
-  // --- Возможная внешняя обёртка (Any / outer message) ---
-  // field 1: wraper (tag 0a)
-  if (rawHex.substr(pos, 2) === '0a') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    if(newPos === rawHex.length) rawHex = dataHex;
+
+  for (const f of fields) {
+    switch (f.fieldNumber) {
+      case 1: // field 1: ref_block_bytes (tag 0a) /** @type {!Uint8Array} */
+        message.ref_block_bytes = f.dataHex.toUpperCase();
+        break;
+
+      case 3: // field 3: ref_block_num (tag 18) /** @type {number} */
+        message.ref_block_num = Number(f.value);
+        break;
+
+      case 4: // field 4: ref_block_hash (tag 22) /** @type {!Uint8Array} */
+        message.ref_block_hash = f.dataHex.toUpperCase();
+        break;
+
+      case 8: // field 8: expiration (tag 40) /** @type {number} */
+        message.expiration = Number(f.value);
+        message.expiration_date = new Date(Number(f.value)).toLocaleString('ru-RU');
+        break;
+
+      case 9: // field 9: auths (tag 4a) /** @type {!Uint8Array} */
+        // обычно отсутствует, но по протоколу wireType = 2 (length-delimited)
+        message.auths = f.dataHex.toUpperCase();
+        break;
+
+      case 10: // field 10: data (tag 52) /** @type {!Uint8Array} */
+        message.data = f.dataHex.toUpperCase();
+        break;
+
+      case 11: // field 11: contract (tag 5a) /** @type { message[] } */
+        message.contract_hex = f.dataHex;
+        message.contract = getContractTypeFromHex(f.dataHex);
+        break;
+
+      case 12: // field 12: scripts / data (tag 62) /** @type {!Uint8Array} */
+        message.scripts = f.dataHex.toUpperCase();
+        break;
+
+      case 14: // field 14: timestamp (tag 70) /** @type {number} */
+        message.timestamp = Number(f.value);
+        message.timestamp_date = new Date(Number(f.value)).toLocaleString('ru-RU');
+        break;
+
+      case 18: // field 18: fee_limit (tag 9001) /** @type {number} */
+        message.fee_limit = Number(f.value);
+        break;
+    }
   }
 
-  // field 1: ref_block_bytes (tag 0a) /** @type {!Uint8Array} */
-  if (rawHex.substr(pos, 2) === '0a') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    message.ref_block_bytes = dataHex.toUpperCase();
-    pos = newPos;
-  }
-
-  // field 3: ref_block_num (tag 18) /** @type {number} */
-  if (rawHex.substr(pos, 2) === '18') {
-    const { value, newPos } = readVarintFromHex(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex value',value, 'newPos', newPos);
-    message.ref_block_num = Number(value);
-    pos = newPos;
-  }
-
-  // field 4: ref_block_hash (tag 22) /** @type {!Uint8Array} */
-  if (rawHex.substr(pos, 2) === '22') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    message.ref_block_hash = dataHex.toUpperCase();
-    pos = newPos;
-  }
-
-  // field 8: expiration (tag 40) /** @type {number} */
-  if (rawHex.substr(pos, 2) === '40') {
-    const { value, newPos } = readVarintFromHex(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex value',value, 'newPos', newPos);
-    message.expiration = Number(value);
-    message.expiration_date = new Date(Number(value)).toLocaleString('ru-RU');
-    pos = newPos;
-  }
-
-  // field 9: auths (tag 4a) /** @type {!Uint8Array} */
-  // обычно отсутствует, но по протоколу wireType = 2 (length-delimited)
-  if (rawHex.substr(pos, 2) === '4a') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    message.auths = dataHex.toUpperCase();
-    pos = newPos;
-  }
-
-  // field 10: data (tag 52) /** @type {!Uint8Array} */
-  if (rawHex.substr(pos, 2) === '52') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    message.data = dataHex.toUpperCase();
-    pos = newPos;
-  }
-
-  // field 11: contract (tag 5a)
-  if (rawHex.substr(pos, 2) === '5a') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    message.contract_hex = dataHex;
-    message.contract = getContractTypeFromHex(dataHex);
-    pos = newPos;
-  }
-
-  // field 12: data (tag 62) /** @type {!Uint8Array} */
-  if (rawHex.substr(pos, 2) === '62') {
-    const { dataHex, newPos } = readLengthDelimited(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex dataHex',dataHex, 'newPos', newPos);
-    message.scripts = dataHex.toUpperCase();
-    pos = newPos;
-  }
-
-  // field 14: timestamp (tag 70) /** @type {number} */
-  if (rawHex.substr(pos, 2) === '70') {
-    const { value, newPos } = readVarintFromHex(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex value',value, 'newPos', newPos);
-    message.timestamp = Number(value);
-    message.timestamp_date = new Date(Number(value)).toLocaleString('ru-RU');
-    pos = newPos;
-  }
-
-  // field 18: fee_limit (tag 90) /** @type {number} */
-  if (rawHex.substr(pos, 2) === '90') {
-    const { value, newPos } = readVarintFromHex(rawHex, pos + 2);
-    if(debug) console.log('getMessageFromHex value',value, 'newPos', newPos);
-    message.fee_limit = Number(value);
-    pos = newPos;
-  }
-
-  if(debug) console.log('getMessageFromHex message',message);
   return message;
 }
 
-function getVerifiMessageFromHex(hex, depth = 0) {
+function getFields(hex) {
+  const fields = [];
   let pos = 0;
-  const result = {};
 
   while (pos < hex.length) {
-    const tagByte = parseInt(hex.substr(pos, 2), 16);
-    pos += 2;
+    const tagPos = pos;
 
-    const field = tagByte >> 3;
-    const wireType = tagByte & 0x07;
+    // --- read tag (varint) ---
+    const { value: tag, newPos: afterTag } =
+      readVarintFromHex(hex, pos);
 
-    if (wireType === 2) {
-      const { dataHex, newPos } = readLengthDelimited(hex, pos);
-      pos = newPos;
+    pos = afterTag;
 
-      // пробуем ASCII
-      const ascii = hexToAsciiSafe(dataHex);
-      if (ascii) {
-        result[field] = ascii;
-      } else if (depth < 5) {
-        // пробуем как вложенный protobuf
-        result[field] = getVerifiMessageFromHex(dataHex, depth + 1);
-      } else {
-        result[field] = dataHex;
+    const tagBig = tag; // BigInt
+
+    const fieldNumber = Number(tagBig >> 3n);
+    const wireType = Number(tagBig & 0x07n);
+
+    let dataHex = null;
+    let value = null;
+
+    // --- wire types ---
+    switch (wireType) {
+      case 0: { // varint
+        const r = readVarintFromHex(hex, pos);
+        value = r.value;
+        pos = r.newPos;
+        break;
       }
-    } else {
-      const { value, newPos } = readVarintFromHex(hex, pos);
-      pos = newPos;
-      result[field] = value;
+
+      case 2: { // length-delimited
+        const r = readLengthDelimited(hex, pos);
+        dataHex = r.dataHex;
+        pos = r.newPos;
+        break;
+      }
+
+      default:
+        throw new Error(`Unsupported wireType ${wireType} at ${tagPos}`);
     }
+
+    fields.push({
+      fieldNumber,
+      wireType,
+      tagHex: hex.slice(tagPos, afterTag),
+      start: tagPos,
+      end: pos,
+      dataHex,
+      value
+    });
   }
 
-  return result;
-}
-
-function hexToAsciiSafe(hex) {
-  if (!hex || hex.length % 2 !== 0) return null;
-
-  let result = '';
-  for (let i = 0; i < hex.length; i += 2) {
-    const byte = parseInt(hex.substr(i, 2), 16);
-    if (Number.isNaN(byte)) return null;
-
-    // разрешаем только printable ASCII
-    // 0x20–0x7E + \n \r \t
-    if (
-      byte === 0x09 || // \t
-      byte === 0x0a || // \n
-      byte === 0x0d || // \r
-      (byte >= 0x20 && byte <= 0x7e)
-    ) {
-      result += String.fromCharCode(byte);
-    } else {
-      return null;
-    }
-  }
-
-  // защита от мусора вроде "AAAAAAA"
-  if (result.length < 3) return null;
-
-  return result;
+  return fields;
 }
 
 
+const DEBUG = true;
 
 document.body.addEventListener('click', (event) => {
   if (event.target.id !== 'decodeBtn') return;
   const outDiv = document.getElementById('result_decode');
   outDiv.innerHTML = '';
 
-
-  let textContent = '';
+  let errorsTextContent = '';
   let rawHex = '';
-  let qrType = 1;
 
   let input_val = document.getElementById('input').value;
   try {
-    const qrData = JSON.parse(input_val);
-    rawHex = qrData.hexList?.[0];
-    qrType = qrData.type;
+    rawHex = (JSON.parse(input_val)).hexList?.[0];
   } catch(e) {
-    if(textContent) textContent += '<br>';
-    textContent += '❌ Cтрока не является JSON';
-    if (input_val.startsWith('0a') && input_val.includes('0a1541')) {
+    errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не является JSON';
+    // Возможно строка из hexList
+    if (input_val.startsWith('0a') && (input_val.includes('0a1541') || /0a.{2}5a.{2}22/.test(input_val))) {
       rawHex = input_val.trim();
     }
     else {
-      if(textContent) textContent += '<br>';
-      textContent += '❌ Cтрока не содержит 0a1541 и не начинается с 0a';
+      errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не содержит 0a1541 и не начинается с 0a';
+      errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не начинается с 0a22';
     }
   }
 
   if (!rawHex) {
-    if(textContent) textContent += '<br>';
-    textContent += '❌ Ошибка: hexList пуст или отсутствует';
-    outDiv.innerHTML = textContent;
+    errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Ошибка: hexList пуст или отсутствует';
+    outDiv.innerHTML = errorsTextContent;
     return;
   }
 
   // console.log('rawHex',rawHex);
   try {
-    let message = {};
-    switch (qrType) {
-      case 1:
-        message = getMessageFromHex(rawHex);
-        break;
-
-      case 99:
-        message = getVerifiMessageFromHex(rawHex);
-        break;
-
-      default:
-        throw new Error(`Unsupported QR type: ${qrType}`);
+    const fields = getFields(rawHex);
+    console.log(fields);
+    // const message = getMessageFromHex(rawHex);
+    const message = getMessageFromHex(fields[0].dataHex);
+    if(fields[1]?.dataHex) {
+      message.signature_hex = fields[1].dataHex;
+      message.signature = parseTronSignature(fields[1].dataHex);
     }
+    // console.log('message', message);
 
     const decoded_str = JSON.stringify(message, null, 2);
 
@@ -675,16 +647,14 @@ document.body.addEventListener('click', (event) => {
     const contract_address = message.contract?.value?.contract_address || '';
     const to_address_hex = (type === 'TransferContract' ? (message.contract?.value?.to_address_hex || '') : (message.contract?.value?.data_parsed?.to_address_hex || ''));
     const to_address = (type === 'TransferContract' ? (message.contract?.value?.to_address || '') : (message.contract?.value?.data_parsed?.to_address || ''));
-    const token_name = (type === 'TransferContract' ? 'TRX' : TOKENS_BY_ADDRESS[contract_address]?.abbr || '<span class="text-danger"><неизвестный токен></span>');
+    const token_name = (type === 'TransferContract' ? 'TRX' : (contract_address ? TOKENS_BY_ADDRESS[contract_address]?.abbr || '<span class="text-danger"><неизвестный токен></span>' : ''));
     const token_logo = (type === 'TransferContract' ? TOKENS_LIST_LOGO['TRX']  : (TOKENS_BY_ADDRESS[contract_address]?.abbr ? TOKENS_LIST_LOGO[TOKENS_BY_ADDRESS[contract_address].abbr] || '' : ''));
-    const amount = (type === 'TransferContract' ? (message.contract?.value?.amount || '') : (message.contract?.value?.data_parsed?.amount || ''));
 
 
     const from_address_hex = message.contract?.value?.data_parsed?.from_address_hex || '';
     const from_address = message.contract?.value?.data_parsed?.from_address || '';
     const spender_address_hex = message.contract?.value?.data_parsed?.spender_address_hex || '';
     const spender_address = message.contract?.value?.data_parsed?.spender_address || '';
-    const added_value = message.contract?.value?.data_parsed?.added_value || '';
     const new_owner_hex = message.contract?.value?.data_parsed?.new_owner_hex || '';
     const new_owner = message.contract?.value?.data_parsed?.new_owner || '';
     const contract_function = message.contract?.value?.data_parsed?.function || '';
@@ -692,7 +662,24 @@ document.body.addEventListener('click', (event) => {
     const contract_name = TOKENS_BY_ADDRESS[contract_address]?.name || '';
 
 
+    let sumStr = '', sumVal;
+    if (type === 'TransferContract') {
+      sumVal = message.contract?.value?.amount;
+    } else {
+      sumVal = message.contract?.value?.data_parsed?.amount
+        ?? message.contract?.value?.data_parsed?.added_value;
+    }
 
+    if (sumVal != null && sumVal !== '' && !isNaN(Number(sumVal))) {
+      const numValue = Number(sumVal);
+      const MAX_UINT256 = 115792089237316195423570985008687907853269984665640564039457584007913129639935n;
+      // Используем BigInt для корректного сравнения больших чисел
+      if (BigInt(sumVal) >= MAX_UINT256) {
+        sumStr = '<span class="text-danger"><без ограничений></span>';
+      } else {
+        sumStr = numValue / 1000000;
+      }
+    }
 
     let innerHTML = '';
     innerHTML += `<div class="field-wrap field-wrap-contract-type">`;
@@ -701,15 +688,6 @@ document.body.addEventListener('click', (event) => {
       if(contract_function) innerHTML += `<div class="contract-description text-bold ">${contract_name ? contract_name+':' : '<span class="text-danger">Неизвестный контракт:</span>'} <span class="text-blue">${contract_function}</span></div>`;
       if(contract_function_description) innerHTML += `<div class="contract-description "><i>${contract_function_description}</i></div>`;
 
-      // if(contract_address) innerHTML += `
-      //   <div class="field-wrap contract-description text-darkred">
-      //     <span class="label">Адрес контракта:</span>
-      //     <div class="address-group">
-      //       <span class="address">${contract_address}</span>
-      //       <span class="btn-toggle" onclick="toggleCode(this)">HEX</span>
-      //     </div>
-      //     <pre class="code-block word-break" style="display:none;">${contract_address_hex}</pre>
-      //   </div>`;
       if(contract_address) innerHTML += `
         <div class="field-wrap_grid field-wrap-js contract-description text-darkred">
           <span class="label">Адрес контракта:</span>
@@ -718,9 +696,7 @@ document.body.addEventListener('click', (event) => {
           <pre class="code-block word-break" style="display:none;">${contract_address_hex}</pre>
         </div>
       `;
-
     innerHTML += `</div>`;
-
 
     innerHTML += `
       <div class="field-wrap_grid field-wrap-js">
@@ -751,17 +727,8 @@ document.body.addEventListener('click', (event) => {
       </div>
     `;
 
-    let amountStr = '???';
-    if(amount) {
-      if(amount >= 115792089237316195423570985008687907853269984665640564039457584007913129639935) amountStr = '<span class="text-danger"><без ограничений></span>';
-      else amountStr = amount / 1000000;
-    }
-    else if(added_value) {
-      if(added_value >= 115792089237316195423570985008687907853269984665640564039457584007913129639935) amountStr = '<span class="text-danger"><без ограничений></span>';
-      else amountStr = added_value / 1000000;
-    }
     innerHTML += `
-      <div class="field-wrap d-flex"><strong>Сумма: ${amountStr} ${token_name}</strong>${token_logo ? '<span class="token_logo">'+token_logo+'</span>':''}</div>
+      <div class="field-wrap d-flex"><strong>Сумма: ${sumStr} ${token_name}</strong>${token_logo ? '<span class="token_logo">'+token_logo+'</span>':''}</div>
       <div style="margin-bottom: 15px;"></div>
     `;
 
@@ -795,7 +762,6 @@ document.body.addEventListener('click', (event) => {
 function toggleCode(el) {
   const fieldWrap = el.closest('.field-wrap-js');
   const block = fieldWrap.querySelector('.code-block');
-  const addressSpan = fieldWrap.querySelector('.address');
 
   const isVisible = block.style.display === 'block';
 
