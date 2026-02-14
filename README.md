@@ -37,10 +37,10 @@ tronlink-qr-scanner-decoder/
     css/
       index.css
     js/
-      jsQR.js
-      tron_tokens_data.js
-      qr_scanner.js
-      tron_decoder.js
+      jsQR.js              # a pure javascript QR code reading library. https://github.com/cozmo/jsQR/blob/master/dist/jsQR.js
+      tron_tokens_data.js  # contracts & tokens info (add if desired)
+      qr_scanner.js        # QR scanner control
+      tron_decoder.js      # decoder
   dist/
     scandecodeTRON.html   # built single-file version
   build/
@@ -116,10 +116,10 @@ tronlink-qr-scanner-decoder/
     css/
       index.css
     js/
-      jsQR.js
-      tron_tokens_data.js
-      qr_scanner.js
-      tron_decoder.js
+      jsQR.js              # библиотека чтения QR-кода на чистом JavaScript. https://github.com/cozmo/jsQR/blob/master/dist/jsQR.js
+      tron_tokens_data.js  # информация о контрактах и токенах (дополните если требуется)
+      qr_scanner.js        # управление QR-сканером
+      tron_decoder.js      # декодер
   dist/
     scandecodeTRON.html   # собранный однофайловый вариант
   build/
