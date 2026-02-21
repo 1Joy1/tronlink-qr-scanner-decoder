@@ -10,11 +10,11 @@
     if (!resultFromQR) return;
 
     resultFromQR.innerHTML = `
-      <h3>⚠️ Не подключена библиотека jsQR!</h3>
-      <p><strong>Сканирование невозможно, введите данные вручную:</strong></p>
+      <h3 data-i18n="qrScanner.noLibrary">${t('qrScanner.noLibrary')}</h3>
+      <p><strong data-i18n="qrScanner.scanningImpossible">${t('qrScanner.scanningImpossible')}</strong></p>
       <textarea id="input"></textarea>
       <div style="margin-top:10px;">
-        <button id="decodeBtn" class="btn-decode">Декодировать транзакцию</button>
+        <button id="decodeBtn" class="btn-decode" data-i18n="decodeButton">${t('decodeButton')}</button>
       </div>
       <div id="result_decode"></div>
     `;
@@ -65,7 +65,7 @@
       scanQRCode();
     } catch (error) {
       console.error('Ошибка доступа к камере:', error);
-      resultFromQrDiv.innerHTML = `<p style="color: red;">Ошибка: ${error.message}</p>`;
+      resultFromQrDiv.innerHTML = `<p style="color: red;"><span data-i18n="qrScanner.cameraError">${t('qrScanner.cameraError')}</span>: ${error.message}</p>`;
     }
   }
 
@@ -85,11 +85,11 @@
 
     if (event?.type === 'click' && event.target.id === 'stopButton') {
       resultFromQrDiv.innerHTML = `
-        <h3>⚠️ Сканирование остановлено!</h3>
-        <p><strong>Содержимое:</strong></p>
+        <h3 data-i18n="qrScanner.scanningStopped">${t('qrScanner.scanningStopped')}</h3>
+        <p><strong data-i18n="qrScanner.content">${t('qrScanner.content')}</strong></p>
         <textarea id="input"></textarea>
         <div style="margin-top:10px;">
-          <button id="decodeBtn" class="btn-decode">Декодировать транзакцию</button>
+          <button id="decodeBtn" class="btn-decode" data-i18n="decodeButton">${t('decodeButton')}</button>
         </div>
         <div id="result_decode"></div>
       `;
@@ -123,11 +123,11 @@
         lastScannedResult = code.data;
 
         resultFromQrDiv.innerHTML = `
-          <h3>✅ QR-код распознан!</h3>
-          <p><strong>Содержимое:</strong></p>
+          <h3 data-i18n="qrScanner.qrRecognized">${t('qrScanner.qrRecognized')}</h3>
+          <p><strong data-i18n="qrScanner.content">${t('qrScanner.content')}</strong></p>
           <textarea id="input">${lastScannedResult}</textarea>
           <div style="margin-top:10px;">
-            <button id="decodeBtn" class="btn-decode">Декодировать транзакцию</button>
+            <button id="decodeBtn" class="btn-decode" data-i18n="decodeButton">${t('decodeButton')}</button>
           </div>
           <div id="result_decode"></div>
         `;
@@ -154,4 +154,3 @@
     );
   }
 })();
-

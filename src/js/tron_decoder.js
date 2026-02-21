@@ -195,20 +195,12 @@ function decodeSmartContractData(dataHex) {
     "39509351": "increaseAllowance(address,uint256)",
     "79cc6790": "transferOwnership(address)"
   };
-  const abi_signatures_descriptions = {
-    "a9059cbb": "Перевод токенов",
-    "095ea7b3": "Разрешение адресу распоряжаться токенами",
-    "23b872dd": "Позволяет третьей стороне перевести токены от одного адреса к другому, если первый адрес заранее сделал approve.",
-    "40c10f19": "Создать (выпустить) новые токены.",
-    "42966c68": "Уничтожить часть токенов, уменьшив общее предложение.",
-    "39509351": "Увеличить разрешение (allowance) для стороннего адреса (спендера)",
-    "79cc6790": "Передать владение контрактом другому адресу. После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint)."
-  };
 
   const func = abi_signatures[methodID] || "unknown_function";
-  const description = abi_signatures_descriptions[methodID] || "unknown_function";
   out.function = func;
-  out.description = description;
+  
+  // Получаем описание функции из переводов
+  out.description = t('contractFunctions.' + func) || "unknown_function";
 
   // Аргументы идут после первых 8 символов (4 байта) (названия функции)
   const argsHex = dataHex.substr(8);
@@ -233,9 +225,6 @@ function decodeSmartContractData(dataHex) {
   // Разбираем аргументы в зависимости от сигнатуры
   switch (func) {
     case "transfer(address,uint256)": {
-      // Передаёт токены от текущего владельца (кто вызывает транзакцию) другому адресу.
-      // to_address — адрес получателя.
-      // uint256 amount — количество токенов (в минимальных единицах, например 1 USDT = 1 000 000 единиц).
       const to_address_hex = argHexToHexTronAddress(args[0]);
       const amount = argHexToUint256str(args[1]);
       out.to_address_hex = to_address_hex;
@@ -245,9 +234,6 @@ function decodeSmartContractData(dataHex) {
     }
 
     case "approve(address,uint256)": {
-      // Позволяет владельцу токенов разрешить другому адресу (например, смарт-контракту) тратить их токены.
-      // spender — кому разрешено тратить.
-      // uint256 amount — лимит на использование токенов (в минимальных единицах, например 1 USDT = 1 000 000 единиц).
       const spender = argHexToHexTronAddress(args[0]);
       const amount = argHexToUint256str(args[1]);
       out.spender_address_hex = spender;
@@ -257,11 +243,6 @@ function decodeSmartContractData(dataHex) {
     }
 
     case "transferFrom(address,address,uint256)": {
-      // Позволяет третьей стороне перевести токены от одного адреса к другому, если первый адрес заранее сделал approve.
-      // Используется биржами и DeFi-протоколами для выполнения транзакций от имени пользователя.
-      // address from — чей баланс списывается.
-      // address to — кому отправляются токены.
-      // uint256 amount — сколько отправить.
       const from = argHexToHexTronAddress(args[0]);
       const to = argHexToHexTronAddress(args[1]);
       const amount = argHexToUint256str(args[2]);
@@ -274,9 +255,6 @@ function decodeSmartContractData(dataHex) {
     }
 
     case "mint(address,uint256)": {
-      // Назначение: создать (выпустить) новые токены.
-      // address to — адрес получателя (кому начисляются новые токены).
-      // uint256 amount — количество токенов для выпуска.
       const to = argHexToHexTronAddress(args[0]);
       const amount = argHexToUint256str(args[1]);
       out.to_address_hex = to;
@@ -285,18 +263,11 @@ function decodeSmartContractData(dataHex) {
     }
 
     case "burn(uint256)": {
-      // Назначение: уничтожить часть токенов, уменьшив общее предложение.
-      // uint256 amount — количество токенов для сжигания.
-      // Баланс отправителя уменьшается на указанную сумму, а totalSupply — тоже.
       out.amount = argHexToUint256str(args[0]);
       break;
     }
 
     case "increaseAllowance(address,uint256)": {
-      // Назначение: увеличить разрешение (allowance) для стороннего адреса (спендера).
-      // address spender — кто сможет тратить токены.
-      // uint256 addedValue — на сколько увеличить лимит.
-      // Используется вместе с approve, чтобы постепенно увеличивать лимит без его обнуления.
       const spender = argHexToHexTronAddress(args[0]);
       const addedValue = argHexToUint256str(args[1]);
       out.spender_address_hex = spender;
@@ -306,9 +277,6 @@ function decodeSmartContractData(dataHex) {
     }
 
     case "transferOwnership(address)": {
-      // Назначение: передать владение контрактом другому адресу.
-      // address newOwner — новый владелец.
-      // После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint).
       const newOwner = argHexToHexTronAddress(args[0]);
       out.new_owner_hex = newOwner;
       out.new_owner = addressFromHex(newOwner);
@@ -497,7 +465,7 @@ function getMessageFromHex(messageHex) {
 
       case 8: // field 8: expiration (tag 40) /** @type {number} */
         message.expiration = Number(f.value);
-        message.expiration_date = new Date(Number(f.value)).toLocaleString('ru-RU');
+        message.expiration_date = new Date(Number(f.value)).toLocaleString(getCurrentLanguage() === 'ru' ? 'ru-RU' : 'en-US');
         break;
 
       case 9: // field 9: auths (tag 4a) /** @type {!Uint8Array} */
@@ -520,7 +488,7 @@ function getMessageFromHex(messageHex) {
 
       case 14: // field 14: timestamp (tag 70) /** @type {number} */
         message.timestamp = Number(f.value);
-        message.timestamp_date = new Date(Number(f.value)).toLocaleString('ru-RU');
+        message.timestamp_date = new Date(Number(f.value)).toLocaleString(getCurrentLanguage() === 'ru' ? 'ru-RU' : 'en-US');
         break;
 
       case 18: // field 18: fee_limit (tag 9001) /** @type {number} */
@@ -602,19 +570,19 @@ document.body.addEventListener('click', (event) => {
   try {
     rawHex = (JSON.parse(input_val)).hexList?.[0];
   } catch(e) {
-    errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не является JSON';
+    errorsTextContent += '<p class="my-0" data-i18n="errors.notJson">'+ t('errors.notJson')+'</p>';
     // Возможно строка из hexList
     if (input_val.startsWith('0a') && (input_val.includes('0a1541') || /0a.{2}5a.{2}22/.test(input_val))) {
       rawHex = input_val.trim();
     }
     else {
-      errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не содержит 0a1541 и не начинается с 0a';
-      errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не начинается с 0a22';
+      errorsTextContent += '<p class="my-0" data-i18n="errors.invalidFormat1">'+ t('errors.invalidFormat1')+'</p>';
+      errorsTextContent += '<p class="my-0" data-i18n="errors.invalidFormat2">'+ t('errors.invalidFormat2')+'</p>';
     }
   }
 
   if (!rawHex) {
-    errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Ошибка: hexList пуст или отсутствует';
+    errorsTextContent += '<p class="my-0" data-i18n="errors.noHexList">'+ t('errors.noHexList')+'</p>';
     outDiv.innerHTML = errorsTextContent;
     return;
   }
@@ -637,7 +605,8 @@ document.body.addEventListener('click', (event) => {
     card.className = 'card';
 
     const card_header = document.createElement('h2');
-    card_header.textContent = '📋 Результат декодирования:';
+    card_header.setAttribute('data-i18n', 'decode.result');
+    card_header.textContent = t('decode.result');
     outDiv.appendChild(card_header);
 
     const type = message.contract?.value?.type || '';
@@ -647,7 +616,7 @@ document.body.addEventListener('click', (event) => {
     const contract_address = message.contract?.value?.contract_address || '';
     const to_address_hex = (type === 'TransferContract' ? (message.contract?.value?.to_address_hex || '') : (message.contract?.value?.data_parsed?.to_address_hex || ''));
     const to_address = (type === 'TransferContract' ? (message.contract?.value?.to_address || '') : (message.contract?.value?.data_parsed?.to_address || ''));
-    const token_name = (type === 'TransferContract' ? 'TRX' : (contract_address ? TOKENS_BY_ADDRESS[contract_address]?.abbr || '<span class="text-danger"><неизвестный токен></span>' : ''));
+    const token_name = (type === 'TransferContract' ? 'TRX' : (contract_address ? TOKENS_BY_ADDRESS[contract_address]?.abbr || `<span class="text-danger">${t('decode.unknownToken')}</span>` : ''));
     const token_logo = (type === 'TransferContract' ? TOKENS_LIST_LOGO['TRX']  : (TOKENS_BY_ADDRESS[contract_address]?.abbr ? TOKENS_LIST_LOGO[TOKENS_BY_ADDRESS[contract_address].abbr] || '' : ''));
 
 
@@ -658,9 +627,9 @@ document.body.addEventListener('click', (event) => {
     const new_owner_hex = message.contract?.value?.data_parsed?.new_owner_hex || '';
     const new_owner = message.contract?.value?.data_parsed?.new_owner || '';
     const contract_function = message.contract?.value?.data_parsed?.function || '';
-    const contract_function_description = message.contract?.value?.data_parsed?.description || '';
+    // const contract_function_description = message.contract?.value?.data_parsed?.description || '';
     const contract_name = TOKENS_BY_ADDRESS[contract_address]?.name || '';
-
+    
 
     let sumStr = '', sumVal;
     if (type === 'TransferContract') {
@@ -675,7 +644,7 @@ document.body.addEventListener('click', (event) => {
       const MAX_UINT256 = 115792089237316195423570985008687907853269984665640564039457584007913129639935n;
       // Используем BigInt для корректного сравнения больших чисел
       if (BigInt(sumVal) >= MAX_UINT256) {
-        sumStr = '<span class="text-danger"><без ограничений></span>';
+        sumStr = `<span class="text-danger" data-i18n="decode.unlimited">${t('decode.unlimited')}</span>`;
       } else {
         sumStr = numValue / 1000000;
       }
@@ -683,16 +652,20 @@ document.body.addEventListener('click', (event) => {
 
     let innerHTML = '';
     innerHTML += `<div class="field-wrap field-wrap-contract-type">`;
-      innerHTML += `<h3 class="contract-type">Тип: ${type || 'Не определён!'}</h3>`;
-
-      if(contract_function) innerHTML += `<div class="contract-description text-bold ">${contract_name ? contract_name+':' : '<span class="text-danger">Неизвестный контракт:</span>'} <span class="text-blue">${contract_function}</span></div>`;
-      if(contract_function_description) innerHTML += `<div class="contract-description "><i>${contract_function_description}</i></div>`;
+      const type_not_defined_html = `<span data-i18n="decode.typeNotDefined">${t('decode.typeNotDefined')}</span>`;
+      innerHTML += `<h3 class="contract-type"><span data-i18n="decode.type">${t('decode.type')}</span>: ${type || type_not_defined_html}</h3>`;
+      const unknown_contract_html =`<span class="text-danger" data-i18n="decode.unknownContract">${t('decode.unknownContract')}:</span>`;
+      if(contract_function) {
+        innerHTML += `<div class="contract-description text-bold ">${contract_name ? contract_name+':' : unknown_contract_html} <span class="text-blue">${contract_function}</span></div>`;
+        innerHTML += `<div class="contract-description "><i data-i18n="contractFunctions.${contract_function}">${t('contractFunctions.' + contract_function)}</i></div>`;
+      }
+      // if(contract_function_description) innerHTML += `<div class="contract-description "><i>${contract_function_description}</i></div>`;
 
       if(contract_address) innerHTML += `
         <div class="field-wrap_grid field-wrap-js contract-description text-darkred">
-          <span class="label">Адрес контракта:</span>
+          <span class="label" data-i18n="decode.contractAddress">${t('decode.contractAddress')}</span>
           <span class="address">${contract_address}</span>
-          <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+          <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
           <pre class="code-block word-break" style="display:none;">${contract_address_hex}</pre>
         </div>
       `;
@@ -700,54 +673,54 @@ document.body.addEventListener('click', (event) => {
 
     innerHTML += `
       <div class="field-wrap_grid field-wrap-js">
-        <span class="label">Отправитель:</span>
+        <span class="label" data-i18n="decode.sender">${t('decode.sender')}</span>
         <span class="address">${owner_address || ''}</span>
-        <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+        <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
         <pre class="code-block word-break" style="display:none;">${owner_address_hex || ''}</pre>
       </div>
     `;
 
     if(from_address) innerHTML += `
       <div class="field-wrap_grid field-wrap-js">
-        <span class="label">От кого разрешаем:</span>
+        <span class="label" data-i18n="decode.allowFrom">${t('decode.allowFrom')}</span>
         <span class="address">${from_address}</span>
-        <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+        <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
       <pre class="code-block word-break" style="display:none;">${from_address_hex}</pre>
       </div>
     `;
 
-    let label = 'Получатель';
-    if(spender_address) label = 'Кому разрешаем';
+    let translateKey = 'decode.recipient';
+    if(spender_address) translateKey = 'decode.allowTo';
     innerHTML += `
       <div class="field-wrap_grid field-wrap-js">
-        <span class="label">${label}:</span>
+        <span class="label" data-i18n="${translateKey}">${t(translateKey)}</span>
         <span class="address">${to_address || spender_address ||  ''}</span>
-        <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+        <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
       <pre class="code-block word-break" style="display:none;">${to_address_hex || spender_address_hex || ''}</pre>
       </div>
     `;
 
     innerHTML += `
-      <div class="field-wrap d-flex"><strong>Сумма: ${sumStr} ${token_name}</strong>${token_logo ? '<span class="token_logo">'+token_logo+'</span>':''}</div>
+      <div class="field-wrap d-flex"><strong><span data-i18n="decode.amount">${t('decode.amount')}</span> ${sumStr} ${token_name}</strong>${token_logo ? '<span class="token_logo">'+token_logo+'</span>':''}</div>
       <div style="margin-bottom: 15px;"></div>
     `;
 
     innerHTML += `
       <details>
-        <summary class="field-wrap">📄 Показать полные hex данные</summary>
+        <summary class="field-wrap" data-i18n="decode.showHexData">${t('decode.showHexData')}</summary>
         <pre class="code-block word-break">${rawHex}</pre>
       </details>
       <details>
-        <summary class="field-wrap">📄 Показать полные JSON данные</summary>
+        <summary class="field-wrap" data-i18n="decode.showFullData">${t('decode.showFullData')}</summary>
         <pre class="code-block">${decoded_str}</pre>
       </details>
       <div style="margin-bottom: 15px;"></div>
       `;
     innerHTML += `
-      <div style="font-size: 12px;"><strong>Создан:</strong><i> ${message.timestamp_date || ''}</i></div>
+      <div style="font-size: 12px;"><strong data-i18n="decode.created">${t('decode.created')}</strong><i> ${message.timestamp_date || ''}</i></div>
     `;
     innerHTML += `
-      <div style="font-size: 12px;"><strong>Истекает:</strong><i> ${message.expiration_date || ''}</i></div>
+      <div style="font-size: 12px;"><strong data-i18n="decode.expires">${t('decode.expires')}</strong><i> ${message.expiration_date || ''}</i></div>
     `;
 
     card.innerHTML = innerHTML;
@@ -755,7 +728,7 @@ document.body.addEventListener('click', (event) => {
     // console.log(decodeTriggerSmartTronWeb(rawHex));
   } catch(e) {
     console.error('e',e);
-    outDiv.textContent = '❌ Ошибка: ' + e.message;
+    outDiv.innerHTML = `<span data-i18n="errors.decodingError" style="padding: 1.5em 0 0 0;display: inline-block;">${t('errors.decodingError')}</span> ` + e.message;
   }
 });
 
@@ -769,5 +742,5 @@ function toggleCode(el) {
   block.style.display = isVisible ? 'none' : 'block';
 
   // Меняем текст кнопки
-  el.textContent = isVisible ? '⬇HEX⬇' : 'Скрыть';
+  el.textContent = isVisible ? t('decode.showHexButton') : t('decode.hideButton');
 }

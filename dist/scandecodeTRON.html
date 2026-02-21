@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,121 +75,121 @@
     }
 
     textarea {
-    width: 100%;
-    height: 120px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px;
-    font-family: monospace;
-    resize: vertical;
-    box-sizing: border-box;
+      width: 100%;
+      height: 120px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      font-family: monospace;
+      resize: vertical;
+      box-sizing: border-box;
     }
 
     .btn-decode {
-    background: #e53935;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.2s;
+      background: #e53935;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
     .btn-decode:hover {
-    background: #c62828;
+      background: #c62828;
     }
     .card {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 15px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
     }
     .label {
-    font-weight: bold;
-    margin-right: 5px;
+      font-weight: bold;
+      margin-right: 5px;
     }
     .code-block {
-    background: #222;
-    color: #0f0;
-    font-family: monospace;
-    padding: 8px;
-    border-radius: 6px;
-    overflow-x: auto;
-    max-height: 250px;
-    white-space: pre-wrap;
-    margin: 2px;
-    font-size: 10px;
+      background: #222;
+      color: #0f0;
+      font-family: monospace;
+      padding: 8px;
+      border-radius: 6px;
+      overflow-x: auto;
+      max-height: 250px;
+      white-space: pre-wrap;
+      margin: 2px;
+      font-size: 10px;
     }
     .field-wrap_grid .code-block{
-    font-size: 9px;
-    padding: 6px;
+      font-size: 9px;
+      padding: 6px;
     }
     .btn-toggle {
-    background: #3184d6;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 1px 6px;
-    font-size: 10px;
-    cursor: pointer;
-    transition: background 0.2s;
-    max-width: 40px;
-    text-align: center;
+      background: #3184d6;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      max-width: 40px;
+      text-align: center;
     }
     .btn-toggle:hover {
-    background-color: #1c68b3
+      background-color: #1c68b3
     }
     .field-wrap {
-    margin-bottom: 5px;
+      margin-bottom: 5px;
     }
     .address {
-    font-family: monospace;
-    background: #f1f1f1;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 12px;
+      font-family: monospace;
+      background: #f1f1f1;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 12px;
     }
     .word-break {
-    word-break: break-all;
+      word-break: break-all;
     }
     .address-group {
-    display: inline-block;
-    white-space: nowrap;
+      display: inline-block;
+      white-space: nowrap;
     }
     .contract-type {
-    margin-bottom: 0px;
+      margin-bottom: 0px;
     }
     .contract-description {
-    font-size: 12px;
-    margin-left: 1em;
+      font-size: 12px;
+      margin-left: 1em;
     }
     .field-wrap-contract-type {
-    margin-bottom: 20px;
-    border-bottom: solid #dfdfdf 2px;
+      margin-bottom: 20px;
+      border-bottom: solid #dfdfdf 2px;
     }
     .text-bold {
-    font-weight: bold !important;
+      font-weight: bold !important;
     }
     .text-blue {
-    color: #0964bd;
+      color: #0964bd;
     }
     .text-danger {
-    color: red;
+      color: red;
     }
     .text-darkred {
-    color: #700;
+      color: #700;
     }
 
     .field-wrap_grid {
-    display: grid;
-    grid-template-areas:
-      "label toggle"
-      "address address"
-      "code code";
-    grid-template-columns: 1fr auto;
-    margin-bottom: 8px;
-    align-items: center;
+      display: grid;
+      grid-template-areas:
+        "label toggle"
+        "address address"
+        "code code";
+      grid-template-columns: 1fr auto;
+      margin-bottom: 8px;
+      align-items: center;
     }
 
     .label { grid-area: label; }
@@ -198,59 +198,95 @@
     .code-block { grid-area: code; }
 
     .token_logo > svg {
-    height: 20px;
-    margin-left: 4px;
+      height: 20px;
+      margin-left: 4px;
     }
     .d-flex {
-    display: flex !important;
+      display: flex !important;
+    }
+
+    .justify-content-end {
+      justify-content: end !important;
+    }
+    .justify-content-start  {
+      justify-content: start !important;;
+    }
+    .justify-content-center {
+      justify-content: center !important;;
+    }
+    .mb-0 {
+      margin-bottom: 0 !important;
+    }
+    .mb-1 {
+      margin-bottom: 1em !important;
+    }
+    .mb-2 {
+      margin-bottom: 2em !important;
+    }
+    .my-0 {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
+
+    details > summary {
+      cursor: pointer;
     }
 
     /* Десктопная версия */
     @media (min-width: 570px) {
-    .field-wrap_grid {
-      grid-template-areas:
-        "label address toggle"
-        "code code code";
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-    }
+      .field-wrap_grid {
+        grid-template-areas:
+          "label address toggle"
+          "code code code";
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+      }
 
-    .address {
-      justify-self: start;
-    }
+      .address {
+        justify-self: start;
+      }
     }
 
     /* Медиа-запрос для 375px */
     @media (max-width: 375px) {
       body {
-          padding: 15px;
+        padding: 15px;
       }
 
       #camera-container {
-          width: 50%;
-          max-width: none;
+        width: 50%;
+        max-width: none;
       }
 
       button {
-          width: 100%;
-          margin: 2px 0;
+        width: 100%;
+        margin: 2px 0;
       }
 
       .result {
-          padding: 12px;
-          font-size: 14px;
+        padding: 12px;
+        font-size: 14px;
       }
     }
   </style>
   <title>TRON LINK QR Сканер</title>
 </head>
 <body>
-  <h1 class="title">Сканер QR-кодов TRON LINK
+
+  <h1 class="title mb-0" data-i18n="title">Сканер QR-кодов TRON LINK
     <svg viewBox="0 0 800 600" style="display: inline-block; margin-left:-14px;" width="40" height="40">
       <path d="M399.8 549.7c144.2 0 261-112 261-250.1S544 49.5 399.8 49.5c-144.2 0-261 112-261 250.1S255.7 549.7 399.8 549.7z" fill="#007bff"></path>
       <path fill="#FFFFFF" d="M546.6 254.7c-14.4-12.8-34.4-32.3-50.6-46.1l-1-0.6c-1.6-1.2-3.4-2.2-5.3-2.9l0 0c-39.2-7-221.6-39.7-225.1-39.3-1 0.1-2 0.5-2.8 1l-0.9 0.7c-1.1 1.1-2 2.4-2.5 3.9l-0.2 0.6v3.3v0.5c20.5 54.8 101.6 234.2 117.6 276.4 1 2.9 2.8 8.3 6.2 8.6h0.8c1.8 0 9.6-9.9 9.6-9.9s139.3-161.8 153.4-179c1.8-2.1 3.4-4.4 4.8-6.8 0.4-1.9 0.2-3.8-0.5-5.6S548.1 256 546.6 254.7L546.6 254.7zM428 273.6l59.4-47.2 34.9 30.8L428 273.6zM404.9 270.5l-102.3-80.4 165.6 29.3L404.9 270.5zM414.1 291.5l104.7-16.2L399.1 413.6 414.1 291.5zM288.7 198.2l107.7 87.5-15.6 128L288.7 198.2z"></path>
     </svg>
   </h1>
+
+  <!-- Переключатель языков -->
+  <div class="lang-switch d-flex justify-content-end mb-1">
+    <select id="lang-select">
+      <option value="ru">RU</option>
+      <option value="en">EN</option>
+    </select>
+  </div>
 
   <div id="camera-container">
       <video id="video" playsinline autoplay></video>
@@ -258,11 +294,215 @@
   </div>
 
   <div class="button-container">
-      <button id="startButton" class="btn-scan">Сканировать</button>
-      <button id="stopButton" class="btn-scan" disabled>Остановить</button>
+      <button id="startButton" class="btn-scan" data-i18n="scanButton">Сканировать</button>
+      <button id="stopButton" class="btn-scan" data-i18n="stopButton" disabled>Остановить</button>
   </div>
 
   <div id="resultFromQR" class="result"></div>
+
+  <!-- Подключаем библиотеки в правильном порядке -->
+  <!-- ВАЖНО: i18n должен быть подключен ПЕРВЫМ -->
+  <script>
+    // Система интернационализации (i18n) для TRON LINK QR Scanner
+    const translations = {
+      ru: {
+        // Основные элементы интерфейса
+        title: "Сканер QR-кодов TRON LINK",
+        scanButton: "Сканировать",
+        stopButton: "Остановить",
+        decodeButton: "Декодировать транзакцию",
+        
+        // QR Scanner
+        qrScanner: {
+          noLibrary: "⚠️ Не подключена библиотека jsQR!",
+          scanningImpossible: "Сканирование невозможно, введите данные вручную:",
+          scanningStopped: "⚠️ Сканирование остановлено!",
+          qrRecognized: "✅ QR-код распознан!",
+          content: "Содержимое:",
+          cameraError: "Ошибка"
+        },
+        
+        // Результаты декодирования
+        decode: {
+          result: "📋 Результат декодирования:",
+          type: "Тип",
+          typeNotDefined: "Не определён!",
+          
+          // Поля транзакции
+          sender: "Отправитель:",
+          recipient: "Получатель:",
+          amount: "Сумма:",
+          contractAddress: "Адрес контракта:",
+          allowTo: "Кому разрешаем:",
+          allowFrom: "От кого разрешаем:",
+          
+          // Временные метки
+          created: "Создан:",
+          expires: "Истекает:",
+          
+          // Дополнительная информация
+          showHexData: "📄 Показать hex данные",
+          showFullData: "📄 Показать полные данные",
+          hideButton: "Скрыть",
+          showHexButton: "⬇HEX⬇",
+          
+          // Токены и контракты
+          unknownToken: "&lt;неизвестный токен&gt;",
+          unknownContract: "Неизвестный контракт",
+          unlimited: "&lt;без ограничений&gt;"
+        },
+        
+        // Описания функций смарт-контрактов
+        contractFunctions: {
+          "transfer(address,uint256)": "Перевод токенов",
+          "approve(address,uint256)": "Разрешение адресу распоряжаться токенами",
+          "transferFrom(address,address,uint256)": "Позволяет третьей стороне перевести токены от одного адреса к другому, если первый адрес заранее сделал approve.",
+          "mint(address,uint256)": "Создать (выпустить) новые токены.",
+          "burn(uint256)": "Уничтожить часть токенов, уменьшив общее предложение.",
+          "increaseAllowance(address,uint256)": "Увеличить разрешение (allowance) для стороннего адреса (спендера)",
+          "transferOwnership(address)": "Передать владение контрактом другому адресу. После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint)."
+        },
+        
+        // Ошибки
+        errors: {
+          notJson: "❌ Строка не является JSON",
+          noHexList: "❌ Ошибка: hexList пуст или отсутствует",
+          invalidFormat1: "❌ Строка не содержит 0a1541 и не начинается с 0a",
+          invalidFormat2: "❌ Строка не начинается с 0a**5a**22",
+          decodingError: "❌ Ошибка"
+        }
+      },
+      
+      en: {
+        // Main interface elements
+        title: "TRON LINK QR Scanner",
+        scanButton: "Scan",
+        stopButton: "Stop",
+        decodeButton: "Decode Transaction",
+        
+        // QR Scanner
+        qrScanner: {
+          noLibrary: "⚠️ jsQR library not loaded!",
+          scanningImpossible: "Scanning is impossible, enter data manually:",
+          scanningStopped: "⚠️ Scanning stopped!",
+          qrRecognized: "✅ QR code recognized!",
+          content: "Content:",
+          cameraError: "Error"
+        },
+        
+        // Decoding results
+        decode: {
+          result: "📋 Decoding Result:",
+          type: "Type",
+          typeNotDefined: "Not defined!",
+          
+          // Transaction fields
+          sender: "From:",
+          recipient: "To:",
+          amount: "Amount:",
+          contractAddress: "Contract Address:",
+          allowTo: "Allow To:",
+          allowFrom: "Allow From:",
+          
+          // Timestamps
+          created: "Created:",
+          expires: "Expires:",
+          
+          // Additional information
+          showHexData: "📄 Show hex data",
+          showFullData: "📄 Show full data",
+          hideButton: "⬆Hide⬆",
+          showHexButton: "⬇HEX⬇",
+          
+          // Tokens and contracts
+          unknownToken: "&lt;unknown token&gt;",
+          unknownContract: "Unknown contract",
+          unlimited: "&lt;unlimited&gt;"
+        },
+        
+        // Smart contract function descriptions
+        contractFunctions: {
+          "transfer(address,uint256)": "Transfer tokens",
+          "approve(address,uint256)": "Approve address to spend tokens",
+          "transferFrom(address,address,uint256)": "Allows a third party to transfer tokens from one address to another, provided the first address has previously approved it.",
+          "mint(address,uint256)": "Create (mint) new tokens.",
+          "burn(uint256)": "Burn tokens, reducing the total supply.",
+          "increaseAllowance(address,uint256)": "Increase allowance for a third-party address (spender)",
+          "transferOwnership(address)": "Transfer contract ownership to another address. After calling this function, the old owner loses privileges (e.g., the ability to call mint)."
+        },
+        
+        // Errors
+        errors: {
+          notJson: "❌ String is not JSON",
+          noHexList: "❌ Error: hexList is empty or missing",
+          invalidFormat1: "❌ String doesn't contain 0a1541 and doesn't start with 0a",
+          invalidFormat2: "❌ String doesn't start with 0a**5a**22",
+          decodingError: "❌ Error"
+        }
+      }
+    };
+
+    /**
+     * Функция перевода
+     * @param {string} key - Ключ перевода в формате 'section.subsection.key'
+     * @returns {string} - Переведенная строка или ключ, если перевод не найден
+     */
+    function t(key) {
+      const keys = key.split('.');
+      let value = translations[getCurrentLanguage()];
+      
+      for (const k of keys) {
+        value = value?.[k];
+        if (value === undefined) break;
+      }
+      
+      return value !== undefined ? value : key;
+    }
+
+    /**
+     * Обновление всех текстов на странице при смене языка
+     */
+    function updatePageLanguage() {
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = t(key);
+
+        element.textContent = translation;
+      });
+    }
+
+    /**
+     * Получить текущий язык
+     * @returns {string} - Код текущего языка
+     */
+    function getCurrentLanguage() {
+      return document.documentElement.lang;
+    }
+
+    // Инициализация языка при загрузке страницы
+    // Текущий язык 'en' | 'ru' берем из document.documentElement.lang
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const langSelect = document.getElementById('lang-select');  
+        if (langSelect) {
+          // 1. Устанавливаем значение селекта равным атрибуту lang тега <html>
+          langSelect.value = document.documentElement.lang;
+
+          // 2. Вручную генерируем событие 'change'
+          const event = new Event('change', { bubbles: true });
+          langSelect.dispatchEvent(event);
+        }
+    });
+
+    document.body.addEventListener('change', (event) => {
+      if (event.target.id === 'lang-select') {
+        document.documentElement.lang = event.target.value;
+        // Обновляем интерфейс
+        updatePageLanguage();
+      }
+    });
+
+
+  </script>
 
   <!-- Подключаем библиотеки локально -->
   <!-- https://github.com/cozmo/jsQR/blob/master/dist/jsQR.js -->
@@ -10384,11 +10624,11 @@
         if (!resultFromQR) return;
 
         resultFromQR.innerHTML = `
-          <h3>⚠️ Не подключена библиотека jsQR!</h3>
-          <p><strong>Сканирование невозможно, введите данные вручную:</strong></p>
+          <h3 data-i18n="qrScanner.noLibrary">${t('qrScanner.noLibrary')}</h3>
+          <p><strong data-i18n="qrScanner.scanningImpossible">${t('qrScanner.scanningImpossible')}</strong></p>
           <textarea id="input"></textarea>
           <div style="margin-top:10px;">
-            <button id="decodeBtn" class="btn-decode">Декодировать транзакцию</button>
+            <button id="decodeBtn" class="btn-decode" data-i18n="decodeButton">${t('decodeButton')}</button>
           </div>
           <div id="result_decode"></div>
         `;
@@ -10439,7 +10679,7 @@
           scanQRCode();
         } catch (error) {
           console.error('Ошибка доступа к камере:', error);
-          resultFromQrDiv.innerHTML = `<p style="color: red;">Ошибка: ${error.message}</p>`;
+          resultFromQrDiv.innerHTML = `<p style="color: red;"><span data-i18n="qrScanner.cameraError">${t('qrScanner.cameraError')}</span>: ${error.message}</p>`;
         }
       }
 
@@ -10459,11 +10699,11 @@
 
         if (event?.type === 'click' && event.target.id === 'stopButton') {
           resultFromQrDiv.innerHTML = `
-            <h3>⚠️ Сканирование остановлено!</h3>
-            <p><strong>Содержимое:</strong></p>
+            <h3 data-i18n="qrScanner.scanningStopped">${t('qrScanner.scanningStopped')}</h3>
+            <p><strong data-i18n="qrScanner.content">${t('qrScanner.content')}</strong></p>
             <textarea id="input"></textarea>
             <div style="margin-top:10px;">
-              <button id="decodeBtn" class="btn-decode">Декодировать транзакцию</button>
+              <button id="decodeBtn" class="btn-decode" data-i18n="decodeButton">${t('decodeButton')}</button>
             </div>
             <div id="result_decode"></div>
           `;
@@ -10497,11 +10737,11 @@
             lastScannedResult = code.data;
 
             resultFromQrDiv.innerHTML = `
-              <h3>✅ QR-код распознан!</h3>
-              <p><strong>Содержимое:</strong></p>
+              <h3 data-i18n="qrScanner.qrRecognized">${t('qrScanner.qrRecognized')}</h3>
+              <p><strong data-i18n="qrScanner.content">${t('qrScanner.content')}</strong></p>
               <textarea id="input">${lastScannedResult}</textarea>
               <div style="margin-top:10px;">
-                <button id="decodeBtn" class="btn-decode">Декодировать транзакцию</button>
+                <button id="decodeBtn" class="btn-decode" data-i18n="decodeButton">${t('decodeButton')}</button>
               </div>
               <div id="result_decode"></div>
             `;
@@ -10528,7 +10768,6 @@
         );
       }
     })();
-
 
   </script>
   
@@ -16252,20 +16491,12 @@
         "39509351": "increaseAllowance(address,uint256)",
         "79cc6790": "transferOwnership(address)"
       };
-      const abi_signatures_descriptions = {
-        "a9059cbb": "Перевод токенов",
-        "095ea7b3": "Разрешение адресу распоряжаться токенами",
-        "23b872dd": "Позволяет третьей стороне перевести токены от одного адреса к другому, если первый адрес заранее сделал approve.",
-        "40c10f19": "Создать (выпустить) новые токены.",
-        "42966c68": "Уничтожить часть токенов, уменьшив общее предложение.",
-        "39509351": "Увеличить разрешение (allowance) для стороннего адреса (спендера)",
-        "79cc6790": "Передать владение контрактом другому адресу. После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint)."
-      };
 
       const func = abi_signatures[methodID] || "unknown_function";
-      const description = abi_signatures_descriptions[methodID] || "unknown_function";
       out.function = func;
-      out.description = description;
+      
+      // Получаем описание функции из переводов
+      out.description = t('contractFunctions.' + func) || "unknown_function";
 
       // Аргументы идут после первых 8 символов (4 байта) (названия функции)
       const argsHex = dataHex.substr(8);
@@ -16290,9 +16521,6 @@
       // Разбираем аргументы в зависимости от сигнатуры
       switch (func) {
         case "transfer(address,uint256)": {
-          // Передаёт токены от текущего владельца (кто вызывает транзакцию) другому адресу.
-          // to_address — адрес получателя.
-          // uint256 amount — количество токенов (в минимальных единицах, например 1 USDT = 1 000 000 единиц).
           const to_address_hex = argHexToHexTronAddress(args[0]);
           const amount = argHexToUint256str(args[1]);
           out.to_address_hex = to_address_hex;
@@ -16302,9 +16530,6 @@
         }
 
         case "approve(address,uint256)": {
-          // Позволяет владельцу токенов разрешить другому адресу (например, смарт-контракту) тратить их токены.
-          // spender — кому разрешено тратить.
-          // uint256 amount — лимит на использование токенов (в минимальных единицах, например 1 USDT = 1 000 000 единиц).
           const spender = argHexToHexTronAddress(args[0]);
           const amount = argHexToUint256str(args[1]);
           out.spender_address_hex = spender;
@@ -16314,11 +16539,6 @@
         }
 
         case "transferFrom(address,address,uint256)": {
-          // Позволяет третьей стороне перевести токены от одного адреса к другому, если первый адрес заранее сделал approve.
-          // Используется биржами и DeFi-протоколами для выполнения транзакций от имени пользователя.
-          // address from — чей баланс списывается.
-          // address to — кому отправляются токены.
-          // uint256 amount — сколько отправить.
           const from = argHexToHexTronAddress(args[0]);
           const to = argHexToHexTronAddress(args[1]);
           const amount = argHexToUint256str(args[2]);
@@ -16331,9 +16551,6 @@
         }
 
         case "mint(address,uint256)": {
-          // Назначение: создать (выпустить) новые токены.
-          // address to — адрес получателя (кому начисляются новые токены).
-          // uint256 amount — количество токенов для выпуска.
           const to = argHexToHexTronAddress(args[0]);
           const amount = argHexToUint256str(args[1]);
           out.to_address_hex = to;
@@ -16342,18 +16559,11 @@
         }
 
         case "burn(uint256)": {
-          // Назначение: уничтожить часть токенов, уменьшив общее предложение.
-          // uint256 amount — количество токенов для сжигания.
-          // Баланс отправителя уменьшается на указанную сумму, а totalSupply — тоже.
           out.amount = argHexToUint256str(args[0]);
           break;
         }
 
         case "increaseAllowance(address,uint256)": {
-          // Назначение: увеличить разрешение (allowance) для стороннего адреса (спендера).
-          // address spender — кто сможет тратить токены.
-          // uint256 addedValue — на сколько увеличить лимит.
-          // Используется вместе с approve, чтобы постепенно увеличивать лимит без его обнуления.
           const spender = argHexToHexTronAddress(args[0]);
           const addedValue = argHexToUint256str(args[1]);
           out.spender_address_hex = spender;
@@ -16363,9 +16573,6 @@
         }
 
         case "transferOwnership(address)": {
-          // Назначение: передать владение контрактом другому адресу.
-          // address newOwner — новый владелец.
-          // После вызова этой функции старый владелец теряет привилегии (например, возможность вызывать mint).
           const newOwner = argHexToHexTronAddress(args[0]);
           out.new_owner_hex = newOwner;
           out.new_owner = addressFromHex(newOwner);
@@ -16554,7 +16761,7 @@
 
           case 8: // field 8: expiration (tag 40) /** @type {number} */
             message.expiration = Number(f.value);
-            message.expiration_date = new Date(Number(f.value)).toLocaleString('ru-RU');
+            message.expiration_date = new Date(Number(f.value)).toLocaleString(getCurrentLanguage() === 'ru' ? 'ru-RU' : 'en-US');
             break;
 
           case 9: // field 9: auths (tag 4a) /** @type {!Uint8Array} */
@@ -16577,7 +16784,7 @@
 
           case 14: // field 14: timestamp (tag 70) /** @type {number} */
             message.timestamp = Number(f.value);
-            message.timestamp_date = new Date(Number(f.value)).toLocaleString('ru-RU');
+            message.timestamp_date = new Date(Number(f.value)).toLocaleString(getCurrentLanguage() === 'ru' ? 'ru-RU' : 'en-US');
             break;
 
           case 18: // field 18: fee_limit (tag 9001) /** @type {number} */
@@ -16659,19 +16866,19 @@
       try {
         rawHex = (JSON.parse(input_val)).hexList?.[0];
       } catch(e) {
-        errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не является JSON';
+        errorsTextContent += '<p class="my-0" data-i18n="errors.notJson">'+ t('errors.notJson')+'</p>';
         // Возможно строка из hexList
         if (input_val.startsWith('0a') && (input_val.includes('0a1541') || /0a.{2}5a.{2}22/.test(input_val))) {
           rawHex = input_val.trim();
         }
         else {
-          errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не содержит 0a1541 и не начинается с 0a';
-          errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Cтрока не начинается с 0a22';
+          errorsTextContent += '<p class="my-0" data-i18n="errors.invalidFormat1">'+ t('errors.invalidFormat1')+'</p>';
+          errorsTextContent += '<p class="my-0" data-i18n="errors.invalidFormat2">'+ t('errors.invalidFormat2')+'</p>';
         }
       }
 
       if (!rawHex) {
-        errorsTextContent += (errorsTextContent ? '<br>' : '')+'❌ Ошибка: hexList пуст или отсутствует';
+        errorsTextContent += '<p class="my-0" data-i18n="errors.noHexList">'+ t('errors.noHexList')+'</p>';
         outDiv.innerHTML = errorsTextContent;
         return;
       }
@@ -16694,7 +16901,8 @@
         card.className = 'card';
 
         const card_header = document.createElement('h2');
-        card_header.textContent = '📋 Результат декодирования:';
+        card_header.setAttribute('data-i18n', 'decode.result');
+        card_header.textContent = t('decode.result');
         outDiv.appendChild(card_header);
 
         const type = message.contract?.value?.type || '';
@@ -16704,7 +16912,7 @@
         const contract_address = message.contract?.value?.contract_address || '';
         const to_address_hex = (type === 'TransferContract' ? (message.contract?.value?.to_address_hex || '') : (message.contract?.value?.data_parsed?.to_address_hex || ''));
         const to_address = (type === 'TransferContract' ? (message.contract?.value?.to_address || '') : (message.contract?.value?.data_parsed?.to_address || ''));
-        const token_name = (type === 'TransferContract' ? 'TRX' : (contract_address ? TOKENS_BY_ADDRESS[contract_address]?.abbr || '<span class="text-danger"><неизвестный токен></span>' : ''));
+        const token_name = (type === 'TransferContract' ? 'TRX' : (contract_address ? TOKENS_BY_ADDRESS[contract_address]?.abbr || `<span class="text-danger">${t('decode.unknownToken')}</span>` : ''));
         const token_logo = (type === 'TransferContract' ? TOKENS_LIST_LOGO['TRX']  : (TOKENS_BY_ADDRESS[contract_address]?.abbr ? TOKENS_LIST_LOGO[TOKENS_BY_ADDRESS[contract_address].abbr] || '' : ''));
 
 
@@ -16715,9 +16923,9 @@
         const new_owner_hex = message.contract?.value?.data_parsed?.new_owner_hex || '';
         const new_owner = message.contract?.value?.data_parsed?.new_owner || '';
         const contract_function = message.contract?.value?.data_parsed?.function || '';
-        const contract_function_description = message.contract?.value?.data_parsed?.description || '';
+        // const contract_function_description = message.contract?.value?.data_parsed?.description || '';
         const contract_name = TOKENS_BY_ADDRESS[contract_address]?.name || '';
-
+        
 
         let sumStr = '', sumVal;
         if (type === 'TransferContract') {
@@ -16732,7 +16940,7 @@
           const MAX_UINT256 = 115792089237316195423570985008687907853269984665640564039457584007913129639935n;
           // Используем BigInt для корректного сравнения больших чисел
           if (BigInt(sumVal) >= MAX_UINT256) {
-            sumStr = '<span class="text-danger"><без ограничений></span>';
+            sumStr = `<span class="text-danger" data-i18n="decode.unlimited">${t('decode.unlimited')}</span>`;
           } else {
             sumStr = numValue / 1000000;
           }
@@ -16740,16 +16948,20 @@
 
         let innerHTML = '';
         innerHTML += `<div class="field-wrap field-wrap-contract-type">`;
-          innerHTML += `<h3 class="contract-type">Тип: ${type || 'Не определён!'}</h3>`;
-
-          if(contract_function) innerHTML += `<div class="contract-description text-bold ">${contract_name ? contract_name+':' : '<span class="text-danger">Неизвестный контракт:</span>'} <span class="text-blue">${contract_function}</span></div>`;
-          if(contract_function_description) innerHTML += `<div class="contract-description "><i>${contract_function_description}</i></div>`;
+          const type_not_defined_html = `<span data-i18n="decode.typeNotDefined">${t('decode.typeNotDefined')}</span>`;
+          innerHTML += `<h3 class="contract-type"><span data-i18n="decode.type">${t('decode.type')}</span>: ${type || type_not_defined_html}</h3>`;
+          const unknown_contract_html =`<span class="text-danger" data-i18n="decode.unknownContract">${t('decode.unknownContract')}:</span>`;
+          if(contract_function) {
+            innerHTML += `<div class="contract-description text-bold ">${contract_name ? contract_name+':' : unknown_contract_html} <span class="text-blue">${contract_function}</span></div>`;
+            innerHTML += `<div class="contract-description "><i data-i18n="contractFunctions.${contract_function}">${t('contractFunctions.' + contract_function)}</i></div>`;
+          }
+          // if(contract_function_description) innerHTML += `<div class="contract-description "><i>${contract_function_description}</i></div>`;
 
           if(contract_address) innerHTML += `
             <div class="field-wrap_grid field-wrap-js contract-description text-darkred">
-              <span class="label">Адрес контракта:</span>
+              <span class="label" data-i18n="decode.contractAddress">${t('decode.contractAddress')}</span>
               <span class="address">${contract_address}</span>
-              <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+              <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
               <pre class="code-block word-break" style="display:none;">${contract_address_hex}</pre>
             </div>
           `;
@@ -16757,54 +16969,54 @@
 
         innerHTML += `
           <div class="field-wrap_grid field-wrap-js">
-            <span class="label">Отправитель:</span>
+            <span class="label" data-i18n="decode.sender">${t('decode.sender')}</span>
             <span class="address">${owner_address || ''}</span>
-            <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+            <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
             <pre class="code-block word-break" style="display:none;">${owner_address_hex || ''}</pre>
           </div>
         `;
 
         if(from_address) innerHTML += `
           <div class="field-wrap_grid field-wrap-js">
-            <span class="label">От кого разрешаем:</span>
+            <span class="label" data-i18n="decode.allowFrom">${t('decode.allowFrom')}</span>
             <span class="address">${from_address}</span>
-            <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+            <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
           <pre class="code-block word-break" style="display:none;">${from_address_hex}</pre>
           </div>
         `;
 
-        let label = 'Получатель';
-        if(spender_address) label = 'Кому разрешаем';
+        let translateKey = 'decode.recipient';
+        if(spender_address) translateKey = 'decode.allowTo';
         innerHTML += `
           <div class="field-wrap_grid field-wrap-js">
-            <span class="label">${label}:</span>
+            <span class="label" data-i18n="${translateKey}">${t(translateKey)}</span>
             <span class="address">${to_address || spender_address ||  ''}</span>
-            <span class="btn-toggle" onclick="toggleCode(this)">⬇HEX⬇</span>
+            <span class="btn-toggle" onclick="toggleCode(this)" data-i18n="decode.showHexButton">${t('decode.showHexButton')}</span>
           <pre class="code-block word-break" style="display:none;">${to_address_hex || spender_address_hex || ''}</pre>
           </div>
         `;
 
         innerHTML += `
-          <div class="field-wrap d-flex"><strong>Сумма: ${sumStr} ${token_name}</strong>${token_logo ? '<span class="token_logo">'+token_logo+'</span>':''}</div>
+          <div class="field-wrap d-flex"><strong><span data-i18n="decode.amount">${t('decode.amount')}</span> ${sumStr} ${token_name}</strong>${token_logo ? '<span class="token_logo">'+token_logo+'</span>':''}</div>
           <div style="margin-bottom: 15px;"></div>
         `;
 
         innerHTML += `
           <details>
-            <summary class="field-wrap">📄 Показать полные hex данные</summary>
+            <summary class="field-wrap" data-i18n="decode.showHexData">${t('decode.showHexData')}</summary>
             <pre class="code-block word-break">${rawHex}</pre>
           </details>
           <details>
-            <summary class="field-wrap">📄 Показать полные JSON данные</summary>
+            <summary class="field-wrap" data-i18n="decode.showFullData">${t('decode.showFullData')}</summary>
             <pre class="code-block">${decoded_str}</pre>
           </details>
           <div style="margin-bottom: 15px;"></div>
           `;
         innerHTML += `
-          <div style="font-size: 12px;"><strong>Создан:</strong><i> ${message.timestamp_date || ''}</i></div>
+          <div style="font-size: 12px;"><strong data-i18n="decode.created">${t('decode.created')}</strong><i> ${message.timestamp_date || ''}</i></div>
         `;
         innerHTML += `
-          <div style="font-size: 12px;"><strong>Истекает:</strong><i> ${message.expiration_date || ''}</i></div>
+          <div style="font-size: 12px;"><strong data-i18n="decode.expires">${t('decode.expires')}</strong><i> ${message.expiration_date || ''}</i></div>
         `;
 
         card.innerHTML = innerHTML;
@@ -16812,7 +17024,7 @@
         // console.log(decodeTriggerSmartTronWeb(rawHex));
       } catch(e) {
         console.error('e',e);
-        outDiv.textContent = '❌ Ошибка: ' + e.message;
+        outDiv.innerHTML = `<span data-i18n="errors.decodingError" style="padding: 1.5em 0 0 0;display: inline-block;">${t('errors.decodingError')}</span> ` + e.message;
       }
     });
 
@@ -16826,10 +17038,10 @@
       block.style.display = isVisible ? 'none' : 'block';
 
       // Меняем текст кнопки
-      el.textContent = isVisible ? '⬇HEX⬇' : 'Скрыть';
+      el.textContent = isVisible ? t('decode.showHexButton') : t('decode.hideButton');
     }
-  </script>
 
+  </script>
 
 </body>
 </html>

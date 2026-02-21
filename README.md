@@ -1,10 +1,10 @@
 # TRONLINK QR Scanner / Decoder
 
-[English](#english) | [Русский](#русский)
+[English](#description) | [Русский](#описание)
 
 ---
 
-## English
+## Description
 
 This is a small offline tool that allows you to see what data is encoded in a **TronLink** wallet QR code when using a *hot* and *cold* wallet setup.
 The tool partially addresses the “blind signing” problem of QR-code-based transactions by allowing the transaction contents to be analyzed **before signing**.
@@ -19,8 +19,6 @@ The solution is *partial* by design, because transactions created by TronLink ha
 In practice, it is impossible to fit into this time frame. Nevertheless, even in this form, the tool is better than having no way at all to see what is actually encoded in the QR code.
 In the future, if users actively reach out to the wallet developers, a setting to increase the transaction lifetime (`expiration`) may be added. This would provide more time for analysis and make the process safer.
 
-The project **is not a finished solution**. Only the functionality required by the author has been implemented. Anyone can use this project as a base and extend it to suit their own needs.
-
 What we can do at the moment:
 - scanning **TronLink** QR codes using a computer or smartphone camera;
 - decoding transactions (including `TransferContract`, `TriggerSmartContract`, `ColdWalletOwnerVerifyContract`);
@@ -28,6 +26,15 @@ What we can do at the moment:
 - displaying human-readable transaction information (addresses, tokens, amounts, etc.);
 - **TRX** and **USDT** tokens have been verified; for other tokens, inaccuracies in determining token decimals may occur.
 
+> #### ⚠️ **Important**
+> The project **not a production-ready solution**.  
+> Only the functionality required by the author has been implemented.  
+> Anyone can use this project as a base and extend it to suit their own needs.
+---
+
+## 🛠 Project Status
+
+The project is currently under development.
 
 ### Project Structure
 ```text
@@ -37,6 +44,7 @@ tronlink-qr-scanner-decoder/
     css/
       index.css
     js/
+      i18n.js              # internationalization system
       jsQR.js              # a pure javascript QR code reading library. https://github.com/cozmo/jsQR/blob/master/dist/jsQR.js
       tron_tokens_data.js  # contracts & tokens info (add if desired)
       qr_scanner.js        # QR scanner control
@@ -57,6 +65,10 @@ tronlink-qr-scanner-decoder/
    - JavaScript — files in `src/js/`
 
 2. For local testing, simply open `src/index.html` in a browser.
+
+3. To change the default language, set the lang attribute in the html tag within `src/index.html` to either 'en' or 'ru'.
+
+4. You can add SVG logos for additional tokens to the TOKENS_LIST_LOGO constant in the `src/js/tron_tokens_data.js` file.
 
 ### Building Single File
 
@@ -79,11 +91,11 @@ It will have embedded:
 This file can be used as an offline tool (single HTML without external dependencies).
 
 
----
----
----
+***
+***
+***
 
-## Русский
+## Описание
 
 Это небольшой оффлайн-инструмент, который позволяет посмотреть, какие данные зашифрованы в QR-коде кошелька **TronLink** при использовании связки *горячего* и *холодного* кошелька.
 Инструмент частично решает проблему «слепой подписи» транзакций через QR-код, позволяя проанализировать содержимое транзакции **до её подписания**.
@@ -98,8 +110,6 @@ This file can be used as an offline tool (single HTML without external dependenc
 На практике уложиться в этот тайминг невозможно. Тем не менее, даже в таком виде инструмент лучше, чем полное отсутствие возможности увидеть, что именно закодировано в QR-коде.
 Возможно, в будущем, если пользователи будут активнее обращаться к разработчикам кошелька, появится настройка для увеличения времени жизни (`expiration`) транзакции. Это дало бы больше времени на анализ и сделало процесс безопаснее.
 
-Проект **не является законченным решением**. Реализован только тот функционал, который был необходим автору. Любой желающий может использовать этот проект как основу и доработать его под свои задачи.
-
 Что мы умеем на данный момент:
 - сканирование QR-кодов **TronLink** с помощью камеры компьютера или телефона;
 - декодирование транзакций (включая `TransferContract`, `TriggerSmartContract`, `ColdWalletOwnerVerifyContract`);
@@ -107,6 +117,15 @@ This file can be used as an offline tool (single HTML without external dependenc
 - отображение человекочитаемой информации о транзакции (адреса, токены, суммы и т. д.);
 - проверены токены **TRX** и **USDT**; для других токенов возможны неточности при определении разрядности номинала.
 
+> #### ⚠️ **Важно**
+> Проект **не является законченным production-решением**.  
+> Реализован только тот функционал, который был необходим автору.  
+> Любой желающий может использовать этот проект как основу и доработать его под свои задачи.
+---
+
+## 🛠 Статус проекта
+
+Проект находится в стадии разработки.
 
 ### Структура проекта
 ```text
@@ -116,6 +135,7 @@ tronlink-qr-scanner-decoder/
     css/
       index.css
     js/
+      i18n.js              # система интернационализации
       jsQR.js              # библиотека чтения QR-кода на чистом JavaScript. https://github.com/cozmo/jsQR/blob/master/dist/jsQR.js
       tron_tokens_data.js  # информация о контрактах и токенах (дополните если требуется)
       qr_scanner.js        # управление QR-сканером
@@ -136,6 +156,10 @@ tronlink-qr-scanner-decoder/
    - JavaScript — файлы в `src/js/`
 
 2. Для локального теста можно просто открыть `src/index.html` в браузере.
+
+3. Для того чтобы изменить язык по умолчанию, установите в `src/index.html` в теге html атрибут lang в значение 'en' или 'ru'.
+
+4. В файл `src/js/tron_tokens_data.js` в константу TOKENS_LIST_LOGO можно добавить SVG логотипы дополнительных токенов.
 
 ### Сборка в один файл
 
