@@ -6,6 +6,8 @@ const root = path.join(__dirname, '..');
 const srcHtmlPath = path.join(root, 'src', 'index.html');
 const distDir = path.join(root, 'dist');
 const distHtmlPath = path.join(distDir, 'scandecodeTRON.html');
+const docsDir = path.join(root, 'docs');
+const docsHtmlPath = path.join(docsDir, 'index.html');
 
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
@@ -46,3 +48,6 @@ html = html.replace(
 
 fs.writeFileSync(distHtmlPath, html, 'utf8');
 console.log('Собрано в', distHtmlPath);
+
+fs.writeFileSync(docsHtmlPath, html, 'utf8');
+console.log('Собрано в', docsHtmlPath);

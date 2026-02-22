@@ -1,5 +1,7 @@
 # TRONLINK QR Scanner / Decoder
 
+[DEMO](https://1joy1.github.io/tronlink-qr-scanner-decoder/)
+
 [English](#description) | [Русский](#описание)
 
 ---
@@ -50,7 +52,9 @@ tronlink-qr-scanner-decoder/
       qr_scanner.js        # QR scanner control
       tron_decoder.js      # decoder
   dist/
-    scandecodeTRON.html   # built single-file version
+    scandecodeTRON.html    # built single-file version
+  docs/
+    index.html             # bundled single-file version for DEMO
   build/
     build-inline.js     # build script (inline CSS/JS into HTML)
   package.json
@@ -141,7 +145,9 @@ tronlink-qr-scanner-decoder/
       qr_scanner.js        # управление QR-сканером
       tron_decoder.js      # декодер
   dist/
-    scandecodeTRON.html   # собранный однофайловый вариант
+    scandecodeTRON.html    # собранный однофайловый вариант
+  docs/
+    index.html             # собранный однофайловый вариант для DEMO
   build/
     build-inline.js     # скрипт сборки (inline CSS/JS в HTML)
   package.json
